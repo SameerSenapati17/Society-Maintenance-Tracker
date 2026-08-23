@@ -1,5 +1,9 @@
 # Society Maintenance Tracker (SocietyOS)
 
+## Live Deployment
+- **Hosted Frontend Application**: `https://<your-app-url>.vercel.app` (or `http://localhost:5173` locally)
+- **Hosted Backend API**: `https://<your-api-url>.onrender.com/api` (or `http://localhost:5000/api` locally)
+
 ## Overview
 Society Maintenance Tracker — branded as **SocietyOS** in the UI — is a full-stack web application for apartment societies. Residents can register, submit maintenance complaints with optional photos, track complaint status, and view notices. Administrators can manage all complaints, update status and priority, detect overdue work, publish notices, and trigger resident email notifications.
 
@@ -176,14 +180,35 @@ MongoDB Atlas:
 - Create a cluster, database user, and network access rule.
 - Put the connection string in `MONGODB_URI`.
 
-## Demo Credentials
-Created by `npm run seed` for local development:
-- Admin: `admin@example.com` / `Password123`
-- Resident: `asha@example.com` / `Password123`
-- Resident: `rohan@example.com` / `Password123`
+## Administrator Bootstrap & User Roles
+
+- **Resident Registration**: Public registration (`/register`) automatically creates accounts with `role: "resident"`. Client-supplied role overrides are strictly ignored by the backend.
+- **Administrator Account Creation**: Administrators are created securely through the backend CLI bootstrap utility:
+  ```bash
+  cd backend
+  npm run create-admin
+  ```
+  The command interactively prompts for the administrator's name, email, and password, securely hashes the password with bcrypt, and provisions the `admin` role. Alternatively, `ADMIN_NAME`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` environment variables can be provided.
+- **Role-Based Access Control**: All `/api/admin/*` endpoints strictly require a valid JWT token and `role === "admin"`. Resident attempts to access admin APIs receive `403 Forbidden`.
+
+## Development Seed & Database Cleanup Tools (Optional)
+
+- **Seed Development Data**:
+  ```bash
+  cd backend
+  npm run seed
+  ```
+  *(Development-only tool: seeds sample resident records and demo complaints for testing the interface. It never runs automatically during normal server startup).*
+
+- **Remove Stale Demo Accounts**:
+  ```bash
+  cd backend
+  npm run clean-demo-users
+  ```
+  *(One-time cleanup utility: safely deletes legacy development test accounts `admin@example.com`, `asha@example.com`, and `rohan@example.com` from the database).*
 
 ## Testing
-Backend tests are in `backend/test/api.test.js` and can be run with:
+Backend tests are located in `backend/test/api.test.js` and can be run with:
 ```bash
 cd backend
 npm test
@@ -193,3 +218,5 @@ npm test
 - Email delivery depends on valid SMTP credentials.
 - Photo upload requires Cloudinary credentials; missing configuration returns a clear backend error.
 - This assignment implementation does not include real-time updates or background schedulers by design.
+#   S o c i e t y - M a i n t e n a n c e - T r a c k e r  
+ 
