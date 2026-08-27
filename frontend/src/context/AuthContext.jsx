@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { api } from "../services/api.js";
+import { authService } from "../services/authService.js";
 
 const AuthContext = createContext(null);
 
@@ -13,9 +13,9 @@ export function AuthProvider({ children }) {
       setLoading(false);
       return;
     }
-    api
-      .get("/auth/me")
-      .then((res) => setUser(res.data.data.user))
+    authService
+      .getMe()
+      .then((userData) => setUser(userData))
       .catch(() => localStorage.removeItem("token"))
       .finally(() => setLoading(false));
   }, []);
@@ -25,16 +25,16 @@ export function AuthProvider({ children }) {
       user,
       loading,
       login: async (email, password) => {
-        const res = await api.post("/auth/login", { email, password });
-        localStorage.setItem("token", res.data.data.token);
-        setUser(res.data.data.user);
-        return res.data.data.user;
+        const data = await authService.login(email, password);
+        localStorage.setItem("token", data.token);
+        setUser(data.user);
+        return data.user;
       },
       register: async (payload) => {
-        const res = await api.post("/auth/register", payload);
-        localStorage.setItem("token", res.data.data.token);
-        setUser(res.data.data.user);
-        return res.data.data.user;
+        const data = await authService.register(payload);
+        localStorage.setItem("token", data.token);
+        setUser(data.user);
+        return data.user;
       },
       logout: () => {
         localStorage.removeItem("token");

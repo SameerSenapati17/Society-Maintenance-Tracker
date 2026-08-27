@@ -2,15 +2,20 @@ import express from "express";
 import { body, param, query } from "express-validator";
 import {
   createComplaint,
+  findDuplicateComplaints,
   getAdminComplaintById,
   getAdminComplaints,
   getAdminDashboard,
   getComplaintById,
   getMyComplaints,
   getNotifications,
+  triageComplaintAI,
+  analyzeComplaintVisualAI,
+  submitVisualFeedback,
   updatePriority,
   updateStatus
 } from "../controllers/complaintController.js";
+
 import { requireAuth, requireRole } from "../middleware/auth.js";
 import { upload } from "../middleware/upload.js";
 import { validate } from "../middleware/validate.js";
@@ -33,6 +38,8 @@ complaintRoutes.post(
 complaintRoutes.get("/my", requireAuth, requireRole("resident"), getMyComplaints);
 complaintRoutes.get("/notifications", requireAuth, getNotifications);
 complaintRoutes.get("/:id", requireAuth, idParam, validate, getComplaintById);
+// Phase 4B: visual feedback — requireAuth only (admin + resident both can submit)
+complaintRoutes.post("/:id/visual-feedback", requireAuth, idParam, validate, submitVisualFeedback);
 
 adminComplaintRoutes.get(
   "/complaints",
@@ -63,4 +70,38 @@ adminComplaintRoutes.patch(
   validate,
   updatePriority
 );
+adminComplaintRoutes.post(
+  "/complaints/:id/ai-triage",
+  requireAuth,
+  requireRole("admin"),
+  idParam,
+  validate,
+  triageComplaintAI
+);
+adminComplaintRoutes.post(
+  "/complaints/:id/find-duplicates",
+  requireAuth,
+  requireRole("admin"),
+  idParam,
+  validate,
+  findDuplicateComplaints
+);
+adminComplaintRoutes.post(
+  "/complaints/:id/visual-analysis",
+  requireAuth,
+  requireRole("admin"),
+  idParam,
+  validate,
+  analyzeComplaintVisualAI
+);
+// Phase 4B: visual feedback — requireAuth only (admin + resident both can submit)
+adminComplaintRoutes.post(
+  "/complaints/:id/visual-feedback",
+  requireAuth,
+  idParam,
+  validate,
+  submitVisualFeedback
+);
 adminComplaintRoutes.get("/dashboard", requireAuth, requireRole("admin"), getAdminDashboard);
+
+

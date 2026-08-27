@@ -1,21 +1,95 @@
+# ================================
+# Dependencies
+# ================================
 node_modules/
+
+# ================================
+# Environment / Secrets
+# ================================
 .env
 .env.*
 !.env.example
 !**/.env.example
+
+# ================================
+# Build / Generated Frontend Files
+# ================================
 dist/
 build/
 .next/
+
+# ================================
+# IDE
+# ================================
 .vscode/
 .idea/
+
+# ================================
+# Testing / Coverage
+# ================================
 coverage/
+
+# ================================
+# Logs
+# ================================
 logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# ================================
+# OS
+# ================================
 .DS_Store
 Thumbs.db
+
+# ================================
+# Runtime / Temporary Files
+# ================================
 uploads/
 tmp/
 *.local
+
+# ================================
+# ML Service — Datasets
+# ================================
+# Raw downloaded datasets
+ml-service/data/raw/
+
+# Processed/generated datasets
+ml-service/data/processed/
+
+# Dataset archives
+ml-service/*.zip
+ml-service/**/*.zip
+
+# ================================
+# ML Service — Heavy Model Artifacts
+# ================================
+ml-service/models/classification/*.pt
+ml-service/models/detection/*.pt
+
+# Detection training artifacts
+ml-service/models/detection/elevator/
+ml-service/models/detection/electrical/
+
+# Training outputs
+ml-service/runs/
+
+# ================================
+# ML Service — Python Cache
+# ================================
+ml-service/**/__pycache__/
+ml-service/**/*.pyc
+
+# ================================
+# ML Service — Local Experiment Data
+# ================================
+ml-service/data_acquisition/
+ml-service/data/real_world_validation/
+
+# ================================
+# ML Service — Keep Registry
+# ================================
+!ml-service/models/registry.json

@@ -1,0 +1,102 @@
+{
+  "model_path": "models/classification/nivara-visual-classifier.pt",
+  "split": "test",
+  "sample_count": 553,
+  "loss": 0.1591,
+  "top1_accuracy": 0.9421,
+  "top2_accuracy": 0.9964,
+  "top3_accuracy": 1.0,
+  "balanced_accuracy": 0.9623,
+  "macro_precision": 0.9075,
+  "macro_recall": 0.9623,
+  "macro_f1": 0.9269,
+  "confusion_matrix": [
+    [
+      44,
+      0,
+      0,
+      5,
+      1
+    ],
+    [
+      0,
+      23,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      354,
+      1,
+      24
+    ],
+    [
+      0,
+      0,
+      0,
+      50,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      50
+    ]
+  ],
+  "classification_report": {
+    "broken_infrastructure": {
+      "precision": 0.9777777777777777,
+      "recall": 0.88,
+      "f1-score": 0.9263157894736842,
+      "support": 50.0
+    },
+    "electrical_hazard": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 23.0
+    },
+    "garbage_waste": {
+      "precision": 1.0,
+      "recall": 0.9315789473684211,
+      "f1-score": 0.9645776566757494,
+      "support": 380.0
+    },
+    "parking_road_damage": {
+      "precision": 0.8928571428571429,
+      "recall": 1.0,
+      "f1-score": 0.9433962264150944,
+      "support": 50.0
+    },
+    "wall_ceiling_damage": {
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "f1-score": 0.8,
+      "support": 50.0
+    },
+    "accuracy": 0.9421338155515371,
+    "macro avg": {
+      "precision": 0.9074603174603174,
+      "recall": 0.9623157894736842,
+      "f1-score": 0.9268579345129055,
+      "support": 553.0
+    },
+    "weighted avg": {
+      "precision": 0.9581647004793479,
+      "recall": 0.9421338155515371,
+      "f1-score": 0.9457958595501332,
+      "support": 553.0
+    }
+  },
+  "classes": [
+    "broken_infrastructure",
+    "electrical_hazard",
+    "garbage_waste",
+    "parking_road_damage",
+    "wall_ceiling_damage"
+  ]
+}

@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Building2 } from "lucide-react";
+import { Mail, ArrowRight } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { getErrorMessage } from "../services/api.js";
-import { LoadingSpinner } from "../components/ui/LoadingState.jsx";
+import { Input } from "../components/ui/Input.jsx";
+import { PasswordInput } from "../components/ui/PasswordInput.jsx";
+import { Button } from "../components/ui/Button.jsx";
+import { AuthShell } from "./AuthShell.jsx";
 
 export default function Login() {
   const { login } = useAuth();
@@ -27,49 +30,57 @@ export default function Login() {
   }
 
   return (
-    <AuthShell title="Welcome back" subtitle="Sign in to your SocietyOS account">
+    <AuthShell
+      title="Welcome back"
+      subtitle="Sign in to your Nivara workspace"
+    >
       <form className="space-y-4" onSubmit={submit}>
         {error && (
-          <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">
+          <div
+            className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs font-semibold text-rose-700 animate-fade-in"
+            role="alert"
+          >
             {error}
           </div>
         )}
-        <label className="block">
-          <span className="text-sm font-medium text-slate-700">Email</span>
-          <input
-            className="mt-1"
-            type="email"
-            placeholder="you@example.com"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            required
-            autoComplete="email"
-          />
-        </label>
-        <label className="block">
-          <span className="text-sm font-medium text-slate-700">Password</span>
-          <input
-            className="mt-1"
-            type="password"
-            placeholder="••••••••"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            required
-            autoComplete="current-password"
-          />
-        </label>
-        <button className="btn w-full" disabled={loading}>
-          {loading ? (
-            <span className="flex items-center justify-center gap-2">
-              <LoadingSpinner size={16} /> Signing in...
-            </span>
-          ) : (
-            "Sign in"
-          )}
-        </button>
-        <p className="text-center text-sm text-slate-500">
-          New resident?{" "}
-          <Link className="font-semibold text-brand hover:underline" to="/register">
+
+        <Input
+          label="Work or Resident Email"
+          type="email"
+          icon={Mail}
+          placeholder="name@example.com"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          required
+          autoComplete="email"
+        />
+
+        <PasswordInput
+          label="Password"
+          placeholder="Enter your password"
+          value={form.password}
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
+          required
+          autoComplete="current-password"
+        />
+
+        <div className="pt-2">
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            className="w-full shadow-glow"
+            loading={loading}
+            icon={ArrowRight}
+            iconPosition="right"
+          >
+            {loading ? "Authenticating..." : "Continue to Workspace"}
+          </Button>
+        </div>
+
+        <p className="text-center text-xs text-slate-500 pt-3 border-t border-slate-100 mt-5">
+          New resident to the building?{" "}
+          <Link className="font-semibold text-indigo-600 hover:text-indigo-700 hover:underline" to="/register">
             Create account
           </Link>
         </p>
@@ -78,24 +89,4 @@ export default function Login() {
   );
 }
 
-export function AuthShell({ title, subtitle, children }) {
-  return (
-    <div className="grid min-h-screen place-items-center bg-mist p-4">
-      <div className="w-full max-w-md animate-fade-in">
-        <div className="mb-6 text-center">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-sidebar text-white">
-            <Building2 size={24} />
-          </div>
-          <h1 className="text-xl font-bold text-ink">SocietyOS</h1>
-          <p className="text-xs text-slate-500">Maintenance & Community Operations</p>
-        </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-card">
-          <h2 className="text-xl font-bold text-ink">{title}</h2>
-          {subtitle && <p className="mb-6 mt-1 text-sm text-slate-500">{subtitle}</p>}
-          {!subtitle && <div className="mb-6" />}
-          {children}
-        </div>
-      </div>
-    </div>
-  );
-}
+export { AuthShell };

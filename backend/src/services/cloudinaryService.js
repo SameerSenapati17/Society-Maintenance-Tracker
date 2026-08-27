@@ -18,10 +18,33 @@ export async function uploadComplaintPhoto(file) {
     const stream = cloudinary.uploader.upload_stream(
       { folder: "society-maintenance/complaints", resource_type: "image" },
       (error, result) => {
-        if (error) return reject(new ApiError(502, "Cloudinary upload failed"));
+        if (error) {
+          console.error(`[Cloudinary] Upload failed: ${error.message || "Upload stream error"}`);
+          return reject(new ApiError(502, "Image upload failed. Please verify the image file or submit without photo."));
+        }
         return resolve(result.secure_url);
       }
     );
     stream.end(file.buffer);
+  });
+}
+
+export async function uploadVisualArtifact(dataUri, artifactName) {
+  if (!dataUri || typeof dataUri !== "string") return null;
+  assertCloudinaryConfigured();
+
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "society-maintenance/visual-analysis", public_id: artifactName, resource_type: "image" },
+      (error, result) => {
+        if (error) {
+          console.error(`[Cloudinary] Visual artifact upload failed: ${error.message || "Upload stream error"}`);
+          return reject(new ApiError(502, "Visual analysis artifacts could not be stored."));
+        }
+        return resolve(result.secure_url);
+      }
+    );
+    const encoded = dataUri.includes(",") ? dataUri.split(",", 2)[1] : dataUri;
+    stream.end(Buffer.from(encoded, "base64"));
   });
 }

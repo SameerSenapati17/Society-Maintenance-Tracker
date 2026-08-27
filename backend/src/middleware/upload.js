@@ -2,7 +2,7 @@ import multer from "multer";
 import { ApiError } from "../utils/apiError.js";
 
 const storage = multer.memoryStorage();
-const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
 export const upload = multer({
   storage,

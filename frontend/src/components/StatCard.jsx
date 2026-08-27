@@ -1,11 +1,12 @@
 export default function StatCard({ label, value, icon: Icon, accent = "brand", subtitle }) {
   const accents = {
-    brand: "text-brand bg-blue-50",
+    brand: "text-indigo-600 bg-indigo-50",
     success: "text-emerald-600 bg-emerald-50",
     warning: "text-amber-600 bg-amber-50",
     danger: "text-rose-600 bg-rose-50",
-    neutral: "text-slate-600 bg-slate-100"
+    neutral: "text-slate-500 bg-slate-100"
   };
+
 
   return (
     <div className="panel card-hover">

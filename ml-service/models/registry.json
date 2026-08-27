@@ -1,0 +1,57 @@
+{
+  "classification": {
+    "nivara-visual-classifier": {
+      "model_display_name": "Nivara Visual Classifier",
+      "architecture": "EfficientNet-B0 (Transfer Learning + Custom Head)",
+      "checkpoint_path": "models/classification/nivara-visual-classifier.pt",
+      "model_status": "untrained",
+      "num_classes": 7,
+      "classes": [
+        "wall_ceiling_damage",
+        "garbage_waste",
+        "electrical_hazard",
+        "broken_infrastructure",
+        "parking_road_damage",
+        "other"
+      ],
+      "classes_excluded_from_training": [
+        "water_leakage (UNVERIFIED — neg_ prefix ambiguous)",
+        "lift_door_damage (detection-only — elevator_door dataset contains door states, not damage)"
+      ],
+      "trained": false,
+      "eval_metrics": null,
+      "notes": "Model has NOT been trained yet. Run: python train.py. modelStatus will change to 'ready' after successful training."
+    }
+  },
+  "detection": {
+    "elevator": {
+      "model_display_name": "Nivara Elevator Door Detector",
+      "architecture": "YOLOv8n (nano)",
+      "checkpoint_path": "models/detection/nivara-elevator-detector.pt",
+      "model_status": "untrained",
+      "source": "elevator",
+      "classes": ["close", "middle", "open"],
+      "dataset_images": 69,
+      "license": "CC BY 4.0 (Roboflow Universe)",
+      "trained": false,
+      "eval_metrics": null,
+      "notes": "Model has NOT been trained. Run: python detection/train_detection.py --source elevator"
+    },
+    "electrical": {
+      "model_display_name": "Nivara Electrical Fault Detector",
+      "architecture": "YOLOv8n (nano)",
+      "checkpoint_path": "models/detection/nivara-electrical-detector.pt",
+      "model_status": "untrained",
+      "source": "electrical",
+      "classes": ["damaged", "disconnected", "misrouted"],
+      "dataset_images": "~50",
+      "license": "Verify before production use",
+      "trained": false,
+      "eval_metrics": null,
+      "notes": "Model has NOT been trained. Run: python detection/train_detection.py --source electrical"
+    }
+  },
+  "schema_version": "1.0",
+  "last_updated": "2026-08-24T16:00:00Z",
+  "registry_notes": "This registry tracks the canonical state of all Nivara visual intelligence models. Fields are updated automatically by train_detection.py and train.py. Do not manually set model_status to 'ready' — it is set only by successful training runs."
+}

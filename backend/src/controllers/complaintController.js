@@ -7,6 +7,12 @@ import { sendResponse } from "../utils/sendResponse.js";
 import { uploadComplaintPhoto } from "../services/cloudinaryService.js";
 import { assertValidStatusTransition } from "../utils/statusLifecycle.js";
 import { sendStatusChangeEmail } from "../services/emailService.js";
+import { isApproachingSla } from "../utils/overdue.js";
+import { triageComplaint } from "../services/ai/triageService.js";
+import { findSimilarComplaints } from "../services/ai/embeddingService.js";
+import { analyzeComplaintImage } from "../services/ai/visualAnalysisService.js";
+import { buildMultimodalAssessment } from "../services/ai/multimodalAssessmentService.js";
+
 
 function priorityRank(priority) {
   return { High: 1, Medium: 2, Low: 3 }[priority] || 4;
@@ -27,6 +33,10 @@ async function findVisibleComplaint(req, id) {
   if (req.user.role === "resident" && String(complaint.residentId._id) !== String(req.user._id)) {
     throw new ApiError(403, "Forbidden");
   }
+  complaint.multimodalAssessment = buildMultimodalAssessment({
+    triage: complaint.aiTriage,
+    visualAnalysis: complaint.visualAnalysis
+  });
   complaint.refreshOverdue();
   await complaint.save();
   return complaint;
@@ -136,6 +146,7 @@ export const updateStatus = asyncHandler(async (req, res) => {
       await sendStatusChangeEmail({
         to: resident.email,
         complaintId: complaint._id,
+        category: complaint.category,
         previousStatus,
         newStatus: complaint.status,
         note: req.body.note,
@@ -171,13 +182,29 @@ function buildTrendData(complaints, days) {
 
 function computeResolutionMetrics(complaints) {
   const resolved = complaints.filter((c) => c.status === "Resolved" && c.resolvedAt);
-  if (!resolved.length) return { resolutionRate: 0, avgResolutionDays: null, resolvedCount: 0 };
+  const totalCount = complaints.length;
+  if (!resolved.length) {
+    return { resolutionRate: 0, avgResolutionDays: null, resolvedCount: 0, categoryResolution: [] };
+  }
 
   const totalMs = resolved.reduce((sum, c) => sum + (new Date(c.resolvedAt) - new Date(c.createdAt)), 0);
   const avgResolutionDays = Math.round((totalMs / resolved.length / 86400000) * 10) / 10;
-  const resolutionRate = complaints.length ? Math.round((resolved.length / complaints.length) * 100) : 0;
+  const resolutionRate = totalCount ? Math.round((resolved.length / totalCount) * 100) : 0;
 
-  return { resolutionRate, avgResolutionDays, resolvedCount: resolved.length };
+  const catMap = {};
+  for (const c of resolved) {
+    if (!catMap[c.category]) catMap[c.category] = { totalMs: 0, count: 0 };
+    catMap[c.category].totalMs += new Date(c.resolvedAt) - new Date(c.createdAt);
+    catMap[c.category].count += 1;
+  }
+
+  const categoryResolution = Object.entries(catMap).map(([category, val]) => ({
+    category,
+    count: val.count,
+    avgDays: Math.round((val.totalMs / val.count / 86400000) * 10) / 10
+  }));
+
+  return { resolutionRate, avgResolutionDays, resolvedCount: resolved.length, categoryResolution };
 }
 
 function buildRecurringIssues(complaints, days = 30) {
@@ -214,11 +241,13 @@ function buildRecurringIssues(complaints, days = 30) {
 function buildNeedsAttention(complaints) {
   const overdue = complaints.filter((c) => c.isOverdue);
   const highPriority = complaints.filter((c) => c.priority === "High" && c.status !== "Resolved");
+  const approaching = complaints.filter((c) => !c.isOverdue && isApproachingSla(c));
   const unresolved = complaints.filter((c) => c.status !== "Resolved");
 
   return {
     overdueCount: overdue.length,
     highPriorityCount: highPriority.length,
+    approachingSlaCount: approaching.length,
     unresolvedCount: unresolved.length,
     items: [
       ...overdue.slice(0, 5).map((c) => ({
@@ -231,6 +260,14 @@ function buildNeedsAttention(complaints) {
       })),
       ...highPriority.filter((c) => !c.isOverdue).slice(0, 3).map((c) => ({
         type: "high_priority",
+        complaintId: c._id,
+        category: c.category,
+        description: c.description.slice(0, 80),
+        priority: c.priority,
+        status: c.status
+      })),
+      ...approaching.filter((c) => c.priority !== "High").slice(0, 3).map((c) => ({
+        type: "approaching_sla",
         complaintId: c._id,
         category: c.category,
         description: c.description.slice(0, 80),
@@ -255,10 +292,12 @@ export const getAdminDashboard = asyncHandler(async (req, res) => {
   const complaints = await Complaint.find().populate("residentId", "name email");
   let overdue = 0;
   let highPriorityUnresolved = 0;
+  let approachingSla = 0;
 
   for (const complaint of complaints) {
     complaint.refreshOverdue();
     if (complaint.isOverdue) overdue += 1;
+    else if (isApproachingSla(complaint)) approachingSla += 1;
     if (complaint.priority === "High" && complaint.status !== "Resolved") highPriorityUnresolved += 1;
     await complaint.save();
   }
@@ -272,6 +311,7 @@ export const getAdminDashboard = asyncHandler(async (req, res) => {
   const resolved = statusMap.Resolved || 0;
   const metrics = computeResolutionMetrics(complaints);
   const health = computeHealthScore(complaints.length, resolved, overdue, highPriorityUnresolved);
+  const withinSla = Math.max(0, complaints.length - overdue - approachingSla);
 
   const recentComplaints = [...complaints]
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -293,9 +333,15 @@ export const getAdminDashboard = asyncHandler(async (req, res) => {
     inProgress: statusMap["In Progress"] || 0,
     resolved,
     overdue,
-    needsAttention: complaints.length ? buildNeedsAttention(complaints) : { overdueCount: 0, highPriorityCount: 0, unresolvedCount: 0, items: [] },
+    slaPerformance: {
+      withinSla,
+      approachingSla,
+      overdue
+    },
+    needsAttention: complaints.length ? buildNeedsAttention(complaints) : { overdueCount: 0, highPriorityCount: 0, approachingSlaCount: 0, unresolvedCount: 0, items: [] },
     resolutionRate: metrics.resolutionRate,
     avgResolutionDays: metrics.avgResolutionDays,
+    categoryResolution: metrics.categoryResolution,
     health,
     trends: buildTrendData(complaints, trendDays),
     trendDays,
@@ -358,3 +404,162 @@ export const getNotifications = asyncHandler(async (req, res) => {
   notifications.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   sendResponse(res, 200, "Notifications", { notifications: notifications.slice(0, 15) });
 });
+
+export const triageComplaintAI = asyncHandler(async (req, res) => {
+  const complaint = await Complaint.findById(req.params.id);
+  if (!complaint) throw new ApiError(404, "Complaint not found");
+
+  const attemptAt = new Date();
+  complaint.aiAnalysisStatus = {
+    status: "ANALYZED",
+    lastAnalysisAttemptAt: attemptAt,
+    lastSuccessfulAnalysisAt: complaint.aiAnalysisStatus?.lastSuccessfulAnalysisAt || complaint.aiTriage?.generatedAt,
+    lastAnalysisErrorCategory: undefined
+  };
+
+  let triageResult;
+  try {
+    triageResult = await triageComplaint(complaint);
+  } catch (error) {
+    complaint.aiAnalysisStatus = {
+      status: "FAILED",
+      lastAnalysisAttemptAt: attemptAt,
+      lastSuccessfulAnalysisAt: complaint.aiAnalysisStatus?.lastSuccessfulAnalysisAt || complaint.aiTriage?.generatedAt,
+      lastAnalysisErrorCategory: error.errorCategory || "provider_unavailable"
+    };
+    await complaint.save();
+    throw error;
+  }
+
+  // Store AI operational intelligence separately (Human-in-the-loop design)
+  complaint.aiTriage = triageResult;
+  complaint.aiAnalysisStatus = {
+    status: "ANALYZED",
+    lastAnalysisAttemptAt: attemptAt,
+    lastSuccessfulAnalysisAt: triageResult.generatedAt,
+    lastAnalysisErrorCategory: undefined
+  };
+  complaint.multimodalAssessment = buildMultimodalAssessment({
+    triage: complaint.aiTriage,
+    visualAnalysis: complaint.visualAnalysis
+  });
+  await complaint.save();
+
+  sendResponse(res, 200, "AI triage completed", {
+    triage: complaint.aiTriage,
+    multimodalAssessment: complaint.multimodalAssessment,
+    aiAnalysisStatus: complaint.aiAnalysisStatus
+  });
+});
+
+export const findDuplicateComplaints = asyncHandler(async (req, res) => {
+  const complaint = await Complaint.findById(req.params.id);
+  if (!complaint) throw new ApiError(404, "Complaint not found");
+
+  const results = await findSimilarComplaints(complaint);
+
+  // Return only safe, non-sensitive preview fields for each match
+  const matches = results.map(({ complaint: c, similarity }) => ({
+    complaintId: c._id,
+    similarity: Math.round(similarity * 10000) / 10000,
+    percentage: Math.round(similarity * 100),
+    description: c.description,
+    category: c.category,
+    status: c.status,
+    priority: c.priority,
+    residentName: c.residentId?.name || "Resident",
+    createdAt: c.createdAt
+  }));
+
+  sendResponse(res, 200, "Duplicate incident analysis complete", {
+    complaintId: complaint._id,
+    matches
+  });
+});
+
+export const analyzeComplaintVisualAI = asyncHandler(async (req, res) => {
+  const complaint = await Complaint.findById(req.params.id);
+  if (!complaint) throw new ApiError(404, "Complaint not found");
+
+  if (!complaint.photoUrl) {
+    throw new ApiError(400, "Complaint does not have an attached photo for visual analysis.");
+  }
+
+  const visualAnalysis = await analyzeComplaintImage(complaint.photoUrl, { complaintId: complaint._id });
+
+  // Store visual operational intelligence separately (Human-in-the-loop design)
+  complaint.visualAnalysis = visualAnalysis;
+  complaint.multimodalAssessment = buildMultimodalAssessment({
+    triage: complaint.aiTriage,
+    visualAnalysis: complaint.visualAnalysis
+  });
+  await complaint.save();
+
+  sendResponse(res, 200, "Visual analysis complete", {
+    visualAnalysis: complaint.visualAnalysis,
+    multimodalAssessment: complaint.multimodalAssessment
+  });
+});
+
+// ── Phase 4B: Visual Feedback ─────────────────────────────────────────────────
+// Both admin and resident may call this. AI never auto-modifies complaint fields.
+export const submitVisualFeedback = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { accepted, correctedCategory } = req.body;
+    const role = req.user?.role;
+
+    if (typeof accepted !== "boolean") {
+      return res.status(400).json({ message: "accepted (boolean) is required." });
+    }
+
+    const complaint = await Complaint.findById(id);
+    if (!complaint) return res.status(404).json({ message: "Complaint not found." });
+
+    if (!complaint.visualAnalysis?.category) {
+      return res.status(400).json({ message: "No visual analysis exists on this complaint." });
+    }
+
+    const VALID_CATEGORIES = [
+      "broken_infrastructure",
+      "electrical_hazard",
+      "garbage_waste",
+      "parking_road_damage",
+      "wall_ceiling_damage",
+      "Water Leakage",
+      "Wall/Ceiling Damage",
+      "Garbage/Waste",
+      "Electrical Hazard",
+      "Broken Infrastructure",
+      "Lift/Door Damage",
+      "Parking/Road Damage",
+      "Other"
+    ];
+
+    if (!accepted && correctedCategory && !VALID_CATEGORIES.includes(correctedCategory)) {
+      return res.status(400).json({
+        message: `Invalid correctedCategory. Must be one of: ${VALID_CATEGORIES.join(", ")}`
+      });
+    }
+
+    complaint.visualFeedback = {
+      prediction: complaint.visualAnalysis.category,
+      correctedCategory: accepted
+        ? complaint.visualAnalysis.category
+        : correctedCategory || null,
+      accepted,
+      reviewerRole: role,
+      modelVersion: complaint.visualAnalysis.model || "unknown",
+      createdAt: new Date()
+    };
+
+    await complaint.save();
+
+    res.status(200).json({
+      message: "Visual feedback recorded.",
+      data: { visualFeedback: complaint.visualFeedback }
+    });
+  } catch (err) {
+    next(err);
+  }
+};

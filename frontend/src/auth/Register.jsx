@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { User, Mail, ArrowRight } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import { getErrorMessage } from "../services/api.js";
-import { AuthShell } from "./Login.jsx";
-import { LoadingSpinner } from "../components/ui/LoadingState.jsx";
+import { Input } from "../components/ui/Input.jsx";
+import { PasswordInput } from "../components/ui/PasswordInput.jsx";
+import { Button } from "../components/ui/Button.jsx";
+import { AuthShell } from "./AuthShell.jsx";
 
 export default function Register() {
   const { register } = useAuth();
@@ -15,6 +18,17 @@ export default function Register() {
   async function submit(e) {
     e.preventDefault();
     setError("");
+
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match. Please verify both fields.");
+      return;
+    }
+
+    if (form.password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      return;
+    }
+
     setLoading(true);
     try {
       await register(form);
@@ -27,72 +41,77 @@ export default function Register() {
   }
 
   return (
-    <AuthShell title="Create your account" subtitle="Register as a society resident">
+    <AuthShell
+      title="Create account"
+      subtitle="Register as a resident on the Nivara platform"
+    >
       <form className="space-y-4" onSubmit={submit}>
         {error && (
-          <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">
+          <div
+            className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs font-semibold text-rose-700 animate-fade-in"
+            role="alert"
+          >
             {error}
           </div>
         )}
-        <label className="block">
-          <span className="text-sm font-medium text-slate-700">Full name</span>
-          <input
-            className="mt-1"
-            placeholder="Asha Resident"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-            required
-            autoComplete="name"
-          />
-        </label>
-        <label className="block">
-          <span className="text-sm font-medium text-slate-700">Email</span>
-          <input
-            className="mt-1"
-            type="email"
-            placeholder="you@example.com"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            required
-            autoComplete="email"
-          />
-        </label>
-        <label className="block">
-          <span className="text-sm font-medium text-slate-700">Password</span>
-          <input
-            className="mt-1"
-            type="password"
-            placeholder="••••••••"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            required
-            autoComplete="new-password"
-          />
-        </label>
-        <label className="block">
-          <span className="text-sm font-medium text-slate-700">Confirm password</span>
-          <input
-            className="mt-1"
-            type="password"
-            placeholder="••••••••"
-            value={form.confirmPassword}
-            onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
-            required
-            autoComplete="new-password"
-          />
-        </label>
-        <button className="btn w-full" disabled={loading}>
-          {loading ? (
-            <span className="flex items-center justify-center gap-2">
-              <LoadingSpinner size={16} /> Creating account...
-            </span>
-          ) : (
-            "Create account"
-          )}
-        </button>
-        <p className="text-center text-sm text-slate-500">
-          Already registered?{" "}
-          <Link className="font-semibold text-brand hover:underline" to="/login">
+
+        <Input
+          label="Full Name"
+          type="text"
+          icon={User}
+          placeholder="e.g. Alex Morgan"
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+          required
+          autoComplete="name"
+        />
+
+        <Input
+          label="Email Address"
+          type="email"
+          icon={Mail}
+          placeholder="alex@example.com"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          required
+          autoComplete="email"
+        />
+
+        <PasswordInput
+          label="Password"
+          placeholder="At least 6 characters"
+          value={form.password}
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
+          required
+          autoComplete="new-password"
+        />
+
+        <PasswordInput
+          label="Confirm Password"
+          placeholder="Re-enter password"
+          value={form.confirmPassword}
+          onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+          required
+          autoComplete="new-password"
+        />
+
+        <div className="pt-2">
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            className="w-full shadow-glow"
+            loading={loading}
+            icon={ArrowRight}
+            iconPosition="right"
+          >
+            {loading ? "Creating Account..." : "Complete Registration"}
+          </Button>
+        </div>
+
+        <p className="text-center text-xs text-slate-500 pt-3 border-t border-slate-100 mt-5">
+          Already registered on the platform?{" "}
+          <Link className="font-semibold text-indigo-600 hover:text-indigo-700 hover:underline" to="/login">
             Sign in
           </Link>
         </p>

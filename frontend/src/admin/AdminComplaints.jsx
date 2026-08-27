@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { Search } from "lucide-react";
+import { LayoutGrid, RotateCcw, Search, Table as TableIcon } from "lucide-react";
 import AppLayout from "../layouts/AppLayout.jsx";
 import ComplaintTable from "../components/ComplaintTable.jsx";
+import OperationsBoard from "../components/OperationsBoard.jsx";
 import { PageHeader } from "../components/ui/PageHeader.jsx";
 import { PageLoader } from "../components/ui/LoadingState.jsx";
 import EmptyState from "../components/ui/EmptyState.jsx";
@@ -14,35 +15,36 @@ const statuses = ["", "Open", "In Progress", "Resolved"];
 const priorities = ["", "Low", "Medium", "High"];
 
 export default function AdminComplaints() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { addToast } = useToast();
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [viewMode, setViewMode] = useState("table"); // "table" | "board"
   const [filters, setFilters] = useState({
-    category: "",
-    status: "",
+    category: searchParams.get("category") || "",
+    status: searchParams.get("status") || "",
     priority: searchParams.get("priority") || "",
-    from: "",
-    to: "",
-    search: "",
+    from: searchParams.get("from") || "",
+    to: searchParams.get("to") || "",
+    search: searchParams.get("search") || "",
     overdueOnly: searchParams.get("overdue") === "true"
   });
   const [updatingId, setUpdatingId] = useState("");
   const [rowErrors, setRowErrors] = useState({});
 
-  async function load() {
+  async function load(currentFilters = filters) {
     setLoading(true);
     setError("");
     try {
       const params = {};
-      if (filters.category) params.category = filters.category;
-      if (filters.status) params.status = filters.status;
-      if (filters.priority) params.priority = filters.priority;
-      if (filters.from) params.from = filters.from;
-      if (filters.to) params.to = filters.to;
-      if (filters.search) params.search = filters.search;
-      if (filters.overdueOnly) params.overdue = "true";
+      if (currentFilters.category) params.category = currentFilters.category;
+      if (currentFilters.status) params.status = currentFilters.status;
+      if (currentFilters.priority) params.priority = currentFilters.priority;
+      if (currentFilters.from) params.from = currentFilters.from;
+      if (currentFilters.to) params.to = currentFilters.to;
+      if (currentFilters.search) params.search = currentFilters.search;
+      if (currentFilters.overdueOnly) params.overdue = "true";
 
       const res = await api.get("/admin/complaints", { params });
       setComplaints(res.data.data.complaints);
@@ -56,6 +58,21 @@ export default function AdminComplaints() {
   useEffect(() => {
     load();
   }, []);
+
+  function handleResetFilters() {
+    const reset = {
+      category: "",
+      status: "",
+      priority: "",
+      from: "",
+      to: "",
+      search: "",
+      overdueOnly: false
+    };
+    setFilters(reset);
+    setSearchParams({});
+    load(reset);
+  }
 
   function replaceComplaint(updatedComplaint) {
     setComplaints((current) =>
@@ -95,23 +112,53 @@ export default function AdminComplaints() {
 
   return (
     <AppLayout role="admin">
-      <PageHeader
-        title="Complaints"
-        subtitle="Manage and resolve maintenance issues across the society."
-      />
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-2">
+        <PageHeader
+          title="Complaints Workspace"
+          subtitle="Manage, triage, and resolve maintenance requests across the society."
+        />
+        {/* View Switcher Toggle */}
+        <div className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white p-1 shadow-xs">
+          <button
+            type="button"
+            onClick={() => setViewMode("table")}
+            className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-xs font-semibold transition-all ${
+              viewMode === "table"
+                ? "bg-brand text-white shadow-xs"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+            }`}
+          >
+            <TableIcon size={14} />
+            Table View
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode("board")}
+            className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-xs font-semibold transition-all ${
+              viewMode === "board"
+                ? "bg-brand text-white shadow-xs"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+            }`}
+          >
+            <LayoutGrid size={14} />
+            Operations Board
+          </button>
+        </div>
+      </div>
 
+      {/* Filter Panel */}
       <form
-        className="panel mb-5 space-y-4"
+        className="panel mb-6 space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
           load();
         }}
       >
         <div className="relative">
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             className="pl-10"
-            placeholder="Search complaints by ID, resident, description, or category..."
+            placeholder="Search complaints by ID, resident name, description, or category..."
             value={filters.search}
             onChange={(e) => setFilters({ ...filters, search: e.target.value })}
             aria-label="Search complaints"
@@ -119,43 +166,105 @@ export default function AdminComplaints() {
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          <select value={filters.category} onChange={(e) => setFilters({ ...filters, category: e.target.value })} aria-label="Filter by category">
+          <select
+            value={filters.category}
+            onChange={(e) => setFilters({ ...filters, category: e.target.value })}
+            aria-label="Filter by category"
+          >
             {categories.map((item) => (
-              <option key={item} value={item}>{item || "All categories"}</option>
+              <option key={item} value={item}>
+                {item || "All Categories"}
+              </option>
             ))}
           </select>
-          <select value={filters.status} onChange={(e) => setFilters({ ...filters, status: e.target.value })} aria-label="Filter by status">
+          <select
+            value={filters.status}
+            onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+            aria-label="Filter by status"
+          >
             {statuses.map((item) => (
-              <option key={item} value={item}>{item || "All statuses"}</option>
+              <option key={item} value={item}>
+                {item || "All Statuses"}
+              </option>
             ))}
           </select>
-          <select value={filters.priority} onChange={(e) => setFilters({ ...filters, priority: e.target.value })} aria-label="Filter by priority">
+          <select
+            value={filters.priority}
+            onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
+            aria-label="Filter by priority"
+          >
             {priorities.map((item) => (
-              <option key={item} value={item}>{item || "All priorities"}</option>
+              <option key={item} value={item}>
+                {item || "All Priorities"}
+              </option>
             ))}
           </select>
-          <input type="date" value={filters.from} onChange={(e) => setFilters({ ...filters, from: e.target.value })} aria-label="From date" />
-          <input type="date" value={filters.to} onChange={(e) => setFilters({ ...filters, to: e.target.value })} aria-label="To date" />
+          <div>
+            <input
+              type="date"
+              value={filters.from}
+              onChange={(e) => setFilters({ ...filters, from: e.target.value })}
+              aria-label="From date"
+              placeholder="From date"
+            />
+          </div>
+          <div>
+            <input
+              type="date"
+              value={filters.to}
+              onChange={(e) => setFilters({ ...filters, to: e.target.value })}
+              aria-label="To date"
+              placeholder="To date"
+            />
+          </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
-            <input
-              type="checkbox"
-              className="h-4 w-4 rounded border-slate-300"
-              checked={filters.overdueOnly}
-              onChange={(e) => setFilters({ ...filters, overdueOnly: e.target.checked })}
-            />
-            Overdue only
-          </label>
-          <button className="btn" type="submit">Apply filters</button>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-3">
+          <div className="flex items-center gap-4">
+            <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-slate-700">
+              <input
+                type="checkbox"
+                className="h-4 w-4 rounded border-slate-300 text-brand focus:ring-brand"
+                checked={filters.overdueOnly}
+                onChange={(e) => setFilters({ ...filters, overdueOnly: e.target.checked })}
+              />
+              Overdue complaints only
+            </label>
+            <span className="text-xs text-slate-400">
+              Showing {complaints.length} complaint{complaints.length === 1 ? "" : "s"}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="btn-ghost text-xs"
+              onClick={handleResetFilters}
+            >
+              <RotateCcw size={13} /> Reset
+            </button>
+            <button className="btn text-xs py-2 px-4" type="submit">
+              Apply Filters
+            </button>
+          </div>
         </div>
       </form>
 
+      {/* Content Rendering */}
       {loading ? (
-        <PageLoader message="Loading complaints..." />
+        <PageLoader message="Loading complaints workspace..." />
       ) : error ? (
         <EmptyState title="Unable to load complaints" description={error} />
+      ) : viewMode === "board" ? (
+        <OperationsBoard
+          complaints={complaints}
+          basePath="/admin/complaints"
+          adminActions={{
+            updatingId,
+            onPriorityChange: updatePriority,
+            onStatusUpdate: updateStatus,
+            errorFor: rowErrors
+          }}
+        />
       ) : (
         <ComplaintTable
           complaints={complaints}
@@ -172,3 +281,4 @@ export default function AdminComplaints() {
     </AppLayout>
   );
 }
+

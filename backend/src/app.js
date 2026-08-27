@@ -10,7 +10,21 @@ import { errorHandler, notFound } from "./middleware/errorHandler.js";
 export const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: env.clientUrl, credentials: true }));
+const allowedOrigins = env.clientUrl
+  ? env.clientUrl.split(",").map((url) => url.trim())
+  : ["http://localhost:5173"];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes("*") || process.env.NODE_ENV !== "production") {
+        return callback(null, true);
+      }
+      return callback(null, origin);
+    },
+    credentials: true
+  })
+);
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true }));
 

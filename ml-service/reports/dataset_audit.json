@@ -1,0 +1,865 @@
+{
+  "audit_timestamp": "2026-08-24T16:48:13.633433Z",
+  "raw_data_root": "C:\\Users\\samee\\OneDrive\\Documents\\ChatGPT\\Society Maintenance Tracker\\ml-service\\data\\raw",
+  "sources": {
+    "water_leakage": {
+      "source": "water_leakage",
+      "annotation_type": "filename_encoded",
+      "root_path": "C:\\Users\\samee\\OneDrive\\Documents\\ChatGPT\\Society Maintenance Tracker\\ml-service\\data\\raw\\water_leakage",
+      "notes": "UNVERIFIED: Filenames start with 'neg_' which may mean negative sensor temperature OR negative class (non-leakage). Dataset is EXCLUDED from classification training until label semantics are confirmed by dataset owner. All images preserved.",
+      "total_images": 1000,
+      "valid_images": 1000,
+      "corrupt_images": 0,
+      "zero_byte_files": 0,
+      "unsupported_format_files": 0,
+      "extensions_found": {
+        ".jpg": 1000
+      },
+      "classes": {},
+      "class_count": 0,
+      "total_size_bytes": 276454395,
+      "total_size_human": "263.0 MB",
+      "image_dimensions": {
+        "min_width": 986,
+        "max_width": 4000,
+        "min_height": 986,
+        "max_height": 4000
+      },
+      "duplicate_files": [
+        {
+          "file": "neg_-10_t2_11.jpg",
+          "duplicate_of": "neg_-10_t1_14.jpg"
+        },
+        {
+          "file": "neg_-10_t2_14.jpg",
+          "duplicate_of": "neg_-10_t1_16.jpg"
+        },
+        {
+          "file": "neg_-10_t2_21.jpg",
+          "duplicate_of": "neg_-10_t1_21.jpg"
+        },
+        {
+          "file": "neg_-10_t5_1.jpg",
+          "duplicate_of": "neg_-10_t2_13.jpg"
+        },
+        {
+          "file": "neg_-10_t5_10.jpg",
+          "duplicate_of": "neg_-10_t1_16.jpg"
+        },
+        {
+          "file": "neg_-10_t5_22.jpg",
+          "duplicate_of": "neg_-10_t2_22.jpg"
+        },
+        {
+          "file": "neg_-10_t5_37.jpg",
+          "duplicate_of": "neg_-10_t2_39.jpg"
+        },
+        {
+          "file": "neg_-5_t2_11.jpg",
+          "duplicate_of": "neg_-5_t1_14.jpg"
+        },
+        {
+          "file": "neg_-5_t2_14.jpg",
+          "duplicate_of": "neg_-5_t1_16.jpg"
+        },
+        {
+          "file": "neg_-5_t2_21.jpg",
+          "duplicate_of": "neg_-5_t1_21.jpg"
+        },
+        {
+          "file": "neg_-5_t5_1.jpg",
+          "duplicate_of": "neg_-5_t2_13.jpg"
+        },
+        {
+          "file": "neg_-5_t5_10.jpg",
+          "duplicate_of": "neg_-5_t1_16.jpg"
+        },
+        {
+          "file": "neg_-5_t5_22.jpg",
+          "duplicate_of": "neg_-5_t2_22.jpg"
+        },
+        {
+          "file": "neg_-5_t5_37.jpg",
+          "duplicate_of": "neg_-5_t2_39.jpg"
+        },
+        {
+          "file": "pos_10_t2_11.jpg",
+          "duplicate_of": "pos_10_t1_14.jpg"
+        },
+        {
+          "file": "pos_10_t2_14.jpg",
+          "duplicate_of": "pos_10_t1_16.jpg"
+        },
+        {
+          "file": "pos_10_t2_21.jpg",
+          "duplicate_of": "pos_10_t1_21.jpg"
+        },
+        {
+          "file": "pos_10_t5_1.jpg",
+          "duplicate_of": "pos_10_t2_13.jpg"
+        },
+        {
+          "file": "pos_10_t5_10.jpg",
+          "duplicate_of": "pos_10_t1_16.jpg"
+        },
+        {
+          "file": "pos_10_t5_22.jpg",
+          "duplicate_of": "pos_10_t2_22.jpg"
+        },
+        {
+          "file": "pos_10_t5_37.jpg",
+          "duplicate_of": "pos_10_t2_39.jpg"
+        },
+        {
+          "file": "pos_5_t2_11.jpg",
+          "duplicate_of": "pos_5_t1_14.jpg"
+        },
+        {
+          "file": "pos_5_t2_14.jpg",
+          "duplicate_of": "pos_5_t1_16.jpg"
+        },
+        {
+          "file": "pos_5_t2_21.jpg",
+          "duplicate_of": "pos_5_t1_21.jpg"
+        },
+        {
+          "file": "pos_5_t5_1.jpg",
+          "duplicate_of": "pos_5_t2_13.jpg"
+        },
+        {
+          "file": "pos_5_t5_10.jpg",
+          "duplicate_of": "pos_5_t1_16.jpg"
+        },
+        {
+          "file": "pos_5_t5_22.jpg",
+          "duplicate_of": "pos_5_t2_22.jpg"
+        },
+        {
+          "file": "pos_5_t5_37.jpg",
+          "duplicate_of": "pos_5_t2_39.jpg"
+        },
+        {
+          "file": "t2_11.jpg",
+          "duplicate_of": "t1_14.jpg"
+        },
+        {
+          "file": "t2_14.jpg",
+          "duplicate_of": "t1_16.jpg"
+        },
+        {
+          "file": "t2_21.jpg",
+          "duplicate_of": "t1_21.jpg"
+        },
+        {
+          "file": "t5_1.jpg",
+          "duplicate_of": "t2_13.jpg"
+        },
+        {
+          "file": "t5_10.jpg",
+          "duplicate_of": "t1_16.jpg"
+        },
+        {
+          "file": "t5_22.jpg",
+          "duplicate_of": "t2_22.jpg"
+        },
+        {
+          "file": "t5_37.jpg",
+          "duplicate_of": "t2_39.jpg"
+        }
+      ],
+      "duplicate_count": 35,
+      "split_counts": {},
+      "yolo_label_summary": null,
+      "warnings": [],
+      "errors": [],
+      "filename_prefix_analysis": {
+        "neg": 794,
+        "pos": 804,
+        "t1": 80,
+        "t2": 82,
+        "t3": 80,
+        "t4": 80,
+        "t5": 80
+      },
+      "nivara_mapping": "EXCLUDED_UNVERIFIED",
+      "exclusion_reason": "Filename prefix 'neg_' is ambiguous \u2014 cannot confirm whether images represent positive water-leakage samples or negative (non-leakage) samples. Requires confirmation from original dataset source."
+    },
+    "garbage_classification": {
+      "source": "garbage_classification",
+      "annotation_type": "class_directories",
+      "root_path": "C:\\Users\\samee\\OneDrive\\Documents\\ChatGPT\\Society Maintenance Tracker\\ml-service\\data\\raw\\garbage_classification\\Garbage classification\\Garbage classification",
+      "notes": "Kaggle Garbage Classification dataset. 6 source classes: cardboard, glass, metal, paper, plastic, trash. ALL 6 classes map to a single Nivara class: garbage_waste. Domain transfer: generic recyclable material images differ from residential property garbage accumulation incidents.",
+      "total_images": 2527,
+      "valid_images": 2527,
+      "corrupt_images": 0,
+      "zero_byte_files": 0,
+      "unsupported_format_files": 0,
+      "extensions_found": {
+        ".jpg": 2527
+      },
+      "classes": {
+        "cardboard": 403,
+        "glass": 501,
+        "metal": 410,
+        "paper": 594,
+        "plastic": 482,
+        "trash": 137
+      },
+      "class_count": 6,
+      "total_size_bytes": 43282402,
+      "total_size_human": "41.0 MB",
+      "image_dimensions": {
+        "min_width": 512,
+        "max_width": 512,
+        "min_height": 384,
+        "max_height": 384
+      },
+      "duplicate_files": [
+        {
+          "file": "metal\\metal91.jpg",
+          "duplicate_of": "glass\\glass115.jpg"
+        },
+        {
+          "file": "plastic\\plastic152.jpg",
+          "duplicate_of": "glass\\glass176.jpg"
+        },
+        {
+          "file": "plastic\\plastic332.jpg",
+          "duplicate_of": "glass\\glass389.jpg"
+        }
+      ],
+      "duplicate_count": 3,
+      "split_counts": {},
+      "yolo_label_summary": null,
+      "warnings": [],
+      "errors": [],
+      "nivara_mapping": "garbage_waste",
+      "domain_transfer_note": "APPROXIMATE DOMAIN TRANSFER \u2014 Generic recyclable material images. These images depict sorted recyclables in controlled conditions, not property garbage incidents."
+    },
+    "damaged_construction": {
+      "source": "damaged_construction",
+      "annotation_type": "class_directories",
+      "root_path": "C:\\Users\\samee\\OneDrive\\Documents\\ChatGPT\\Society Maintenance Tracker\\ml-service\\data\\raw\\damaged_construction",
+      "notes": "Construction/disaster damage dataset. Has train/test split. INCLUDED classes: Damaged_building/damaged_buildings \u2192 wall_ceiling_damage (approximate), Damaged_highway \u2192 parking_road_damage (approximate), debris \u2192 broken_infrastructure (approximate). EXCLUDED classes: Non-damaged_building, Non-damaged_highway, normal \u2014 treated as BACKGROUND/NEGATIVE, NOT mapped to any Nivara positive class.",
+      "total_images": 4369,
+      "valid_images": 4369,
+      "corrupt_images": 0,
+      "zero_byte_files": 0,
+      "unsupported_format_files": 0,
+      "extensions_found": {
+        ".jpeg": 1505,
+        ".jpg": 2864
+      },
+      "classes": {
+        "Damaged_building": 100,
+        "Damaged_highway": 819,
+        "debris": 513,
+        "Non-damaged_building": 1859,
+        "Non-damaged_highway": 630,
+        "damaged_buildings": 448
+      },
+      "class_count": 6,
+      "total_size_bytes": 88636914,
+      "total_size_human": "84.0 MB",
+      "image_dimensions": {
+        "min_width": 116,
+        "max_width": 2048,
+        "min_height": 118,
+        "max_height": 2048
+      },
+      "duplicate_files": [
+        {
+          "file": "test\\Damaged_highway\\3 (352).jpeg",
+          "duplicate_of": "test\\Damaged_highway\\3 (350).jpeg"
+        },
+        {
+          "file": "test\\debris\\1 (32).jpeg",
+          "duplicate_of": "test\\debris\\1 (29).jpeg"
+        },
+        {
+          "file": "train\\damaged_buildings\\2 (208).jpeg",
+          "duplicate_of": "train\\damaged_buildings\\2 (206).jpeg"
+        },
+        {
+          "file": "train\\damaged_buildings\\2 (401).jpeg",
+          "duplicate_of": "train\\damaged_buildings\\2 (142).jpeg"
+        },
+        {
+          "file": "train\\damaged_buildings\\2 (402).jpeg",
+          "duplicate_of": "train\\damaged_buildings\\2 (141).jpeg"
+        },
+        {
+          "file": "train\\damaged_buildings\\2 (403).jpeg",
+          "duplicate_of": "train\\damaged_buildings\\2 (143).jpeg"
+        },
+        {
+          "file": "train\\damaged_buildings\\2 (404).jpeg",
+          "duplicate_of": "train\\damaged_buildings\\2 (146).jpeg"
+        },
+        {
+          "file": "train\\damaged_buildings\\2 (405).jpeg",
+          "duplicate_of": "train\\damaged_buildings\\2 (144).jpeg"
+        },
+        {
+          "file": "train\\damaged_buildings\\2 (406).jpeg",
+          "duplicate_of": "train\\damaged_buildings\\2 (145).jpeg"
+        },
+        {
+          "file": "train\\Damaged_highway\\3 (117).jpg",
+          "duplicate_of": "test\\Damaged_highway\\3 (346).jpg"
+        },
+        {
+          "file": "train\\Damaged_highway\\3 (195).jpeg",
+          "duplicate_of": "train\\Damaged_highway\\3 (177).jpeg"
+        },
+        {
+          "file": "train\\Damaged_highway\\3 (197).jpeg",
+          "duplicate_of": "train\\Damaged_highway\\3 (181).jpeg"
+        },
+        {
+          "file": "train\\Damaged_highway\\3 (198).jpeg",
+          "duplicate_of": "train\\Damaged_highway\\3 (171).jpeg"
+        },
+        {
+          "file": "train\\Damaged_highway\\3 (202).jpeg",
+          "duplicate_of": "train\\Damaged_highway\\3 (196).jpeg"
+        },
+        {
+          "file": "train\\Damaged_highway\\3 (204).jpeg",
+          "duplicate_of": "train\\Damaged_highway\\3 (147).jpeg"
+        },
+        {
+          "file": "train\\Damaged_highway\\3 (206).jpg",
+          "duplicate_of": "train\\Damaged_highway\\3 (202).jpg"
+        },
+        {
+          "file": "train\\Damaged_highway\\3 (33).jpg",
+          "duplicate_of": "train\\Damaged_highway\\3 (25).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_building\\4 (144).jpg",
+          "duplicate_of": "train\\Non-damaged_building\\4 (126).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_building\\4 (186).jpeg",
+          "duplicate_of": "test\\Non-damaged_building\\4 (5).jpeg"
+        },
+        {
+          "file": "train\\Non-damaged_building\\4 (187).jpeg",
+          "duplicate_of": "test\\Non-damaged_building\\4 (7).jpeg"
+        },
+        {
+          "file": "train\\Non-damaged_building\\4 (241).jpeg",
+          "duplicate_of": "train\\Non-damaged_building\\4 (150).jpeg"
+        },
+        {
+          "file": "train\\Non-damaged_building\\4 (340).jpeg",
+          "duplicate_of": "test\\Non-damaged_building\\4 (69).jpeg"
+        },
+        {
+          "file": "train\\Non-damaged_building\\4 (341).jpeg",
+          "duplicate_of": "test\\Non-damaged_building\\4 (71).jpeg"
+        },
+        {
+          "file": "train\\Non-damaged_building\\4 (422).jpg",
+          "duplicate_of": "train\\Non-damaged_building\\4 (236).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_building\\4 (518).jpeg",
+          "duplicate_of": "test\\Non-damaged_building\\4 (46).jpeg"
+        },
+        {
+          "file": "train\\Non-damaged_building\\4 (651).jpg",
+          "duplicate_of": "train\\Non-damaged_building\\4 (538).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_building\\4 (805).jpg",
+          "duplicate_of": "train\\Non-damaged_building\\4 (612).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_building\\4 (881).jpg",
+          "duplicate_of": "train\\Non-damaged_building\\4 (561).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_building\\4 (946).jpg",
+          "duplicate_of": "train\\Non-damaged_building\\4 (876).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_highway\\5 (1060).jpg",
+          "duplicate_of": "train\\Non-damaged_highway\\5 (1054).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_highway\\5 (1160).jpg",
+          "duplicate_of": "test\\Non-damaged_highway\\5 (767).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_highway\\5 (1168).jpg",
+          "duplicate_of": "test\\Non-damaged_highway\\5 (786).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_highway\\5 (1179).jpg",
+          "duplicate_of": "test\\Non-damaged_highway\\5 (767).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_highway\\5 (1250).jpg",
+          "duplicate_of": "test\\Non-damaged_highway\\5 (853).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_highway\\5 (679).jpg",
+          "duplicate_of": "test\\Non-damaged_highway\\5 (802).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_highway\\5 (732).jpg",
+          "duplicate_of": "train\\Non-damaged_highway\\5 (1249).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_highway\\5 (733).jpg",
+          "duplicate_of": "test\\Non-damaged_highway\\5 (794).jpg"
+        },
+        {
+          "file": "train\\Non-damaged_highway\\5 (856).jpg",
+          "duplicate_of": "train\\Non-damaged_highway\\5 (1210).jpg"
+        }
+      ],
+      "duplicate_count": 38,
+      "split_counts": {
+        "test": 600,
+        "train": 3769
+      },
+      "yolo_label_summary": null,
+      "warnings": [],
+      "errors": [],
+      "nivara_mapping": {
+        "Damaged_building": "wall_ceiling_damage",
+        "damaged_buildings": "wall_ceiling_damage",
+        "Damaged_highway": "parking_road_damage",
+        "debris": "broken_infrastructure",
+        "Non-damaged_building": "EXCLUDED_NEGATIVE",
+        "Non-damaged_highway": "EXCLUDED_NEGATIVE"
+      },
+      "domain_transfer_note": "APPROXIMATE DOMAIN TRANSFER \u2014 Large-scale construction/disaster imagery. Domain gap from residential apartment interior damage is substantial."
+    },
+    "electrical_wiring": {
+      "source": "electrical_wiring",
+      "annotation_type": "yolo",
+      "root_path": "C:\\Users\\samee\\OneDrive\\Documents\\ChatGPT\\Society Maintenance Tracker\\ml-service\\data\\raw\\electrical_wiring\\Predictive Maintenance for Electrical Wiring Faults",
+      "notes": "YOLO-annotated electrical wiring fault dataset. Classes: damaged, disconnected, misrouted \u2192 electrical_hazard (Nivara). Class 'normal' \u2192 EXCLUDED_NEGATIVE (background wiring, not a hazard). YOLO annotations preserved \u2014 primary use: detection pipeline. Secondary use: classification only for fault classes (ignoring bboxes).",
+      "total_images": 300,
+      "valid_images": 300,
+      "corrupt_images": 0,
+      "zero_byte_files": 0,
+      "unsupported_format_files": 0,
+      "extensions_found": {
+        ".jpg": 300
+      },
+      "classes": {
+        "test01": 30,
+        "train01": 240,
+        "val01": 30
+      },
+      "class_count": 3,
+      "total_size_bytes": 819430560,
+      "total_size_human": "781.0 MB",
+      "image_dimensions": {
+        "min_width": 3648,
+        "max_width": 3648,
+        "min_height": 2736,
+        "max_height": 2736
+      },
+      "duplicate_files": [],
+      "duplicate_count": 0,
+      "split_counts": {},
+      "yolo_label_summary": {
+        "total_label_files": 300,
+        "valid_labels": 150,
+        "invalid_labels": 0,
+        "empty_labels": 150,
+        "total_valid_boxes": 2555,
+        "total_invalid_boxes": 0,
+        "classes_referenced": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "orphan_labels": [
+          "damaged_005.txt",
+          "damaged_014.txt",
+          "damaged_019.txt",
+          "damaged_032.txt",
+          "damaged_036.txt",
+          "disconnected_005.txt",
+          "disconnected_007.txt",
+          "disconnected_016.txt",
+          "disconnected_035.txt",
+          "disconnected_047.txt",
+          "misrouted_001.txt",
+          "misrouted_020.txt",
+          "misrouted_024.txt",
+          "misrouted_035.txt",
+          "misrouted_036.txt",
+          "damaged_001.txt",
+          "damaged_002.txt",
+          "damaged_003.txt",
+          "damaged_004.txt",
+          "damaged_006.txt",
+          "damaged_008.txt",
+          "damaged_009.txt",
+          "damaged_010.txt",
+          "damaged_011.txt",
+          "damaged_013.txt",
+          "damaged_015.txt",
+          "damaged_016.txt",
+          "damaged_017.txt",
+          "damaged_018.txt",
+          "damaged_021.txt",
+          "damaged_022.txt",
+          "damaged_023.txt",
+          "damaged_024.txt",
+          "damaged_025.txt",
+          "damaged_026.txt",
+          "damaged_027.txt",
+          "damaged_028.txt",
+          "damaged_029.txt",
+          "damaged_030.txt",
+          "damaged_033.txt",
+          "damaged_034.txt",
+          "damaged_037.txt",
+          "damaged_038.txt",
+          "damaged_039.txt",
+          "damaged_040.txt",
+          "damaged_041.txt",
+          "damaged_042.txt",
+          "damaged_043.txt",
+          "damaged_044.txt",
+          "damaged_045.txt",
+          "damaged_046.txt",
+          "damaged_047.txt",
+          "damaged_048.txt",
+          "damaged_049.txt",
+          "damaged_050.txt",
+          "disconnected_001.txt",
+          "disconnected_003.txt",
+          "disconnected_004.txt",
+          "disconnected_008.txt",
+          "disconnected_009.txt",
+          "disconnected_010.txt",
+          "disconnected_012.txt",
+          "disconnected_013.txt",
+          "disconnected_014.txt",
+          "disconnected_015.txt",
+          "disconnected_017.txt",
+          "disconnected_018.txt",
+          "disconnected_019.txt",
+          "disconnected_020.txt",
+          "disconnected_021.txt",
+          "disconnected_022.txt",
+          "disconnected_023.txt",
+          "disconnected_024.txt",
+          "disconnected_025.txt",
+          "disconnected_026.txt",
+          "disconnected_028.txt",
+          "disconnected_029.txt",
+          "disconnected_030.txt",
+          "disconnected_031.txt",
+          "disconnected_032.txt",
+          "disconnected_033.txt",
+          "disconnected_034.txt",
+          "disconnected_036.txt",
+          "disconnected_037.txt",
+          "disconnected_038.txt",
+          "disconnected_039.txt",
+          "disconnected_040.txt",
+          "disconnected_041.txt",
+          "disconnected_042.txt",
+          "disconnected_043.txt",
+          "disconnected_044.txt",
+          "disconnected_045.txt",
+          "disconnected_046.txt",
+          "disconnected_049.txt",
+          "disconnected_050.txt",
+          "misrouted_002.txt",
+          "misrouted_003.txt",
+          "misrouted_004.txt",
+          "misrouted_005.txt",
+          "misrouted_006.txt",
+          "misrouted_007.txt",
+          "misrouted_008.txt",
+          "misrouted_009.txt",
+          "misrouted_010.txt",
+          "misrouted_011.txt",
+          "misrouted_013.txt",
+          "misrouted_014.txt",
+          "misrouted_015.txt",
+          "misrouted_016.txt",
+          "misrouted_017.txt",
+          "misrouted_018.txt",
+          "misrouted_019.txt",
+          "misrouted_021.txt",
+          "misrouted_022.txt",
+          "misrouted_023.txt",
+          "misrouted_026.txt",
+          "misrouted_027.txt",
+          "misrouted_028.txt",
+          "misrouted_029.txt",
+          "misrouted_030.txt",
+          "misrouted_031.txt",
+          "misrouted_032.txt",
+          "misrouted_033.txt",
+          "misrouted_037.txt",
+          "misrouted_038.txt",
+          "misrouted_039.txt",
+          "misrouted_041.txt",
+          "misrouted_042.txt",
+          "misrouted_043.txt",
+          "misrouted_044.txt",
+          "misrouted_045.txt",
+          "misrouted_046.txt",
+          "misrouted_047.txt",
+          "misrouted_048.txt",
+          "misrouted_049.txt",
+          "damaged_007.txt",
+          "damaged_012.txt",
+          "damaged_020.txt",
+          "damaged_031.txt",
+          "damaged_035.txt",
+          "disconnected_002.txt",
+          "disconnected_006.txt",
+          "disconnected_011.txt",
+          "disconnected_027.txt",
+          "disconnected_048.txt",
+          "misrouted_012.txt",
+          "misrouted_025.txt",
+          "misrouted_034.txt",
+          "misrouted_040.txt",
+          "misrouted_050.txt"
+        ],
+        "missing_labels": [],
+        "issues_by_file": {}
+      },
+      "warnings": [],
+      "errors": [],
+      "nivara_mapping": {
+        "damaged": "electrical_hazard",
+        "disconnected": "electrical_hazard",
+        "misrouted": "electrical_hazard",
+        "normal": "EXCLUDED_NEGATIVE"
+      }
+    },
+    "elevator_door": {
+      "source": "elevator_door",
+      "annotation_type": "yolo",
+      "root_path": "C:\\Users\\samee\\OneDrive\\Documents\\ChatGPT\\Society Maintenance Tracker\\ml-service\\data\\raw\\elevator_door",
+      "notes": "Roboflow YOLOv8 elevator door dataset. License: CC BY 4.0. Classes: close, middle, open \u2014 these are DOOR STATES, not damage indicators. EXCLUDED from classification pipeline entirely. Retained exclusively for detection pipeline (elevator door state detection). 69 images total.",
+      "total_images": 69,
+      "valid_images": 69,
+      "corrupt_images": 0,
+      "zero_byte_files": 0,
+      "unsupported_format_files": 0,
+      "extensions_found": {
+        ".jpg": 69
+      },
+      "classes": {},
+      "class_count": 0,
+      "total_size_bytes": 4975118,
+      "total_size_human": "4.0 MB",
+      "image_dimensions": {
+        "min_width": 640,
+        "max_width": 640,
+        "min_height": 640,
+        "max_height": 640
+      },
+      "duplicate_files": [],
+      "duplicate_count": 0,
+      "split_counts": {
+        "test": 7,
+        "train": 48,
+        "valid": 14
+      },
+      "yolo_label_summary": {
+        "total_label_files": 69,
+        "valid_labels": 69,
+        "invalid_labels": 0,
+        "empty_labels": 0,
+        "total_valid_boxes": 79,
+        "total_invalid_boxes": 0,
+        "classes_referenced": [
+          0,
+          1,
+          2
+        ],
+        "orphan_labels": [
+          "IMG_7431_JPEG.rf.00b881e0af5707620b49418e5c3a1be2.txt",
+          "IMG_7436_JPEG.rf.4cf63e0b274e6416b69d909266c0d036.txt",
+          "IMG_7439_JPEG.rf.aa8dbc98836f128a1025f738c9aa3287.txt",
+          "IMG_7452_JPEG.rf.189bae52438894dacc1489093aa28da7.txt",
+          "IMG_7454_JPEG.rf.2c39aff61fdf3674d94a71571bc20e1f.txt",
+          "IMG_7467_JPEG.rf.b51e3ae237590192cfa59020e39d8d7c.txt",
+          "IMG_7476_JPEG.rf.c260f533bdc255e2b86ef4e26a77a1ad.txt",
+          "IMG_7430_JPEG.rf.a13468337897eb532898b532676678e6.txt",
+          "IMG_7432_JPEG.rf.2787c8e182070bfe148ccd3539594893.txt",
+          "IMG_7433_JPEG.rf.4f6381e82c28e8349775c7c682ef5615.txt",
+          "IMG_7434_JPEG.rf.8f516ea451c6aff3066647251267f248.txt",
+          "IMG_7438_JPEG.rf.0226e4e4ffc607985ea46d5028deca4b.txt",
+          "IMG_7440_JPEG.rf.167a244297dda3bf7ed709c0a8b6b816.txt",
+          "IMG_7441_JPEG.rf.593113c708092b605b63c85d3379f13c.txt",
+          "IMG_7442_JPEG.rf.1d92c3e02c3ae013c99cd61473fddda9.txt",
+          "IMG_7443_JPEG.rf.4c1086a35bd033f254d2296ce8fa0afe.txt",
+          "IMG_7444_JPEG.rf.deaf5209352fe9baff7ecf04c81c0594.txt",
+          "IMG_7445_JPEG.rf.d3f6e7b3ccf6035c00b7c34ebc98f001.txt",
+          "IMG_7448_JPEG.rf.fbd30aed0f5e77b819a1c10ac7b215d8.txt",
+          "IMG_7449_JPEG.rf.81b3222ef85f1afd2397ed59827011fa.txt",
+          "IMG_7450_JPEG.rf.6a23d071fc3d94e90d301ca2d6527a1f.txt",
+          "IMG_7453_JPEG.rf.24ff95753288acab196bf130ef2d6d85.txt",
+          "IMG_7455_JPEG.rf.431ba409d021c2b0489454184ef9eef6.txt",
+          "IMG_7456_JPEG.rf.cdb63ff32e353535305f265edb28bc6b.txt",
+          "IMG_7459_JPEG.rf.d31d008572a2ce28c34c5c84a89e75a3.txt",
+          "IMG_7461_JPEG.rf.a7e84454529dc94fcb980d98477e6be2.txt",
+          "IMG_7462_JPEG.rf.b4ed8a8b3ac4ec1e7a312ff3eff5e0dc.txt",
+          "IMG_7463_JPEG.rf.1c87d4f1b7b049a28a2db5a7d6b01b2e.txt",
+          "IMG_7464_JPEG.rf.6140cd109c84b98f99522087b11a5f7d.txt",
+          "IMG_7469_JPEG.rf.aa08f3dd15ff72d2c114f88694b47334.txt",
+          "IMG_7470_JPEG.rf.8d6e10c0ad0bd6c43eb4001ce83dc464.txt",
+          "IMG_7471_JPEG.rf.d6dc4c21756300b805800c5a0493724b.txt",
+          "IMG_7473_JPEG.rf.4de25e8968750a7c0cb5280085f54620.txt",
+          "IMG_7474_JPEG.rf.310387c7cf7215bb71d76f8a8b570ebe.txt",
+          "IMG_7475_JPEG.rf.8e2865728f30b16db5069ffb0335a14d.txt",
+          "IMG_7477_JPEG.rf.9326c7b3ec1be28f5b072326cb154bb7.txt",
+          "IMG_7478_JPEG.rf.d0919cbce9a9c1f14899cf632843cb17.txt",
+          "IMG_7479_JPEG.rf.d520528d7ecd381bcb7bad2829f057b2.txt",
+          "IMG_7480_JPEG.rf.fe0fd44a4dc43b169dca625013fff06b.txt",
+          "IMG_7482_JPEG.rf.229b98206e9b94895aa8e398fd1ad3ba.txt",
+          "IMG_7483_JPEG.rf.229ba3d5f953f82964a78f0fe906f170.txt",
+          "IMG_7485_JPEG.rf.834cea7fb437849130a768340fe123d6.txt",
+          "IMG_7486_JPEG.rf.df48d9e66cae804e87ebec6c3ef2afca.txt",
+          "IMG_7487_JPEG.rf.d29c8a422f7e4a38c1febc285c3efcc7.txt",
+          "IMG_7488_JPEG.rf.27ed3a4bd73fe20f4640ac5074fd00a9.txt",
+          "IMG_7489_JPEG.rf.b7a8dd6e51b8f4a0ba549000e3037782.txt",
+          "IMG_7490_JPEG.rf.a65c6b389103509e7180ee3c4ab1ade9.txt",
+          "IMG_7491_JPEG.rf.89841796c10e2cf7526b34ea459ee502.txt",
+          "IMG_7492_JPEG.rf.ee982525d0ba4614cff68c43bfca6e74.txt",
+          "IMG_7493_JPEG.rf.cc4105b365a50f65cb4c90788f08b0e5.txt",
+          "IMG_7495_JPEG.rf.489c18d7ff1da27d0ba9bf12296f0028.txt",
+          "IMG_7496_JPEG.rf.924c9bb2e5c83ad156975b87479aa0dc.txt",
+          "IMG_7497_JPEG.rf.a4757eba0d70190ad19734fa94ae02b7.txt",
+          "IMG_7498_JPEG.rf.2d4a5484b349a5173da035305e01590c.txt",
+          "IMG_7499_JPEG.rf.be97fd55f91312bdf3bc1791ffa179d8.txt",
+          "IMG_7435_JPEG.rf.469dc9627284f0f6daa25a0f938a2a6d.txt",
+          "IMG_7437_JPEG.rf.18267eb6f6c2544b015608edd85c0996.txt",
+          "IMG_7447_JPEG.rf.852d84511bd945ee28db9e8a0163591f.txt",
+          "IMG_7451_JPEG.rf.1dadac4753ba1fa623edb130f1d84042.txt",
+          "IMG_7457_JPEG.rf.64bba525e5a06c6036fcaa66069310cb.txt",
+          "IMG_7458_JPEG.rf.f163a0e818d9716517a5bc8e948f0318.txt",
+          "IMG_7460_JPEG.rf.34d84eeb1300cc6c00d27bd8250dc9eb.txt",
+          "IMG_7465_JPEG.rf.f98123b52e467ee61df92d751ef4b329.txt",
+          "IMG_7466_JPEG.rf.1ebf7387c6c4a6f009be7835785cc373.txt",
+          "IMG_7468_JPEG.rf.50340bfcb6884b6e7219c1721439ba16.txt",
+          "IMG_7472_JPEG.rf.d237adb8c981a6cc06ff94f0a7c061dc.txt",
+          "IMG_7481_JPEG.rf.f104a3d90497a0505301ad4cdb55d84d.txt",
+          "IMG_7484_JPEG.rf.91a11b2b59d205c32303edc8286bc9ff.txt",
+          "IMG_7494_JPEG.rf.9f517ea3dca13b01bec3b24389ed2a4b.txt"
+        ],
+        "missing_labels": [],
+        "issues_by_file": {}
+      },
+      "warnings": [],
+      "errors": [],
+      "data_yaml": {
+        "nc": 3,
+        "names": [
+          "close",
+          "middle",
+          "open"
+        ],
+        "license": "CC BY 4.0",
+        "url": "https://universe.roboflow.com/ysm-4z45w/elevator-door/dataset/1"
+      },
+      "nivara_mapping": "EXCLUDED_CLASSIFICATION_ONLY_DETECTION",
+      "license": "CC BY 4.0",
+      "attribution": "Roboflow Universe \u2014 https://universe.roboflow.com/ysm-4z45w/elevator-door/dataset/1"
+    },
+    "car_damage": {
+      "source": "car_damage",
+      "annotation_type": "csv_labels",
+      "root_path": "C:\\Users\\samee\\OneDrive\\Documents\\ChatGPT\\Society Maintenance Tracker\\ml-service\\data\\raw\\car_damage\\image",
+      "notes": "Car damage assessment dataset. Classes: head_lamp, door_scratch, glass_shatter, bumper_dent, unknown, etc. FULLY EXCLUDED from Nivara property maintenance classifier. Vehicle damage is not part of the Nivara operational taxonomy. Reserved for future Nivara Vehicle Damage Intelligence capability.",
+      "total_images": 1512,
+      "valid_images": 1512,
+      "corrupt_images": 0,
+      "zero_byte_files": 0,
+      "unsupported_format_files": 0,
+      "extensions_found": {
+        ".jpeg": 1512
+      },
+      "classes": {},
+      "class_count": 0,
+      "total_size_bytes": 16826874,
+      "total_size_human": "16.0 MB",
+      "image_dimensions": {
+        "min_width": 224,
+        "max_width": 224,
+        "min_height": 224,
+        "max_height": 224
+      },
+      "duplicate_files": [
+        {
+          "file": "1480.jpeg",
+          "duplicate_of": "1077.jpeg"
+        },
+        {
+          "file": "331.jpeg",
+          "duplicate_of": "1250.jpeg"
+        },
+        {
+          "file": "586.jpeg",
+          "duplicate_of": "367.jpeg"
+        },
+        {
+          "file": "646.jpeg",
+          "duplicate_of": "1265.jpeg"
+        },
+        {
+          "file": "85.jpeg",
+          "duplicate_of": "210.jpeg"
+        },
+        {
+          "file": "865.jpeg",
+          "duplicate_of": "800.jpeg"
+        },
+        {
+          "file": "961.jpeg",
+          "duplicate_of": "1127.jpeg"
+        }
+      ],
+      "duplicate_count": 7,
+      "split_counts": {},
+      "yolo_label_summary": null,
+      "warnings": [],
+      "errors": [],
+      "nivara_mapping": "EXCLUDED_FUTURE_VEHICLE_INTELLIGENCE",
+      "exclusion_reason": "Car damage assessment is outside Nivara's residential property maintenance scope. Reserved as a separate future capability.",
+      "annotation_file": "C:\\Users\\samee\\OneDrive\\Documents\\ChatGPT\\Society Maintenance Tracker\\ml-service\\data\\raw\\car_damage\\data.csv"
+    }
+  },
+  "summary": {
+    "total_raw_images": 9777,
+    "total_valid_images": 9777,
+    "total_corrupt_images": 0,
+    "total_duplicate_images": 83,
+    "sources_audited": 6,
+    "sources_for_classification": [
+      "garbage_classification",
+      "damaged_construction",
+      "electrical_wiring"
+    ],
+    "sources_for_detection": [
+      "elevator_door",
+      "electrical_wiring"
+    ],
+    "sources_excluded": {
+      "water_leakage": "UNVERIFIED label semantics (neg_ prefix)",
+      "car_damage": "Vehicle damage \u2014 out of scope for property maintenance classifier",
+      "elevator_door": "Door states (not damage) \u2014 detection only"
+    }
+  }
+}

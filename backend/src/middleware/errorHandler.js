@@ -30,5 +30,12 @@ export function errorHandler(err, req, res, next) {
   }
 
   console.error(message);
-  res.status(statusCode).json({ success: false, message });
+  const response = { success: false, message };
+  if (err.errorCategory === "quota_exceeded") {
+    response.error = {
+      category: "quota_exceeded",
+      message: "The AI service has reached its current usage limit. Please try again later."
+    };
+  }
+  res.status(statusCode).json(response);
 }

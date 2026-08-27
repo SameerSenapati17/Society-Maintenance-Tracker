@@ -1,0 +1,42 @@
+{
+  "architecture": "EfficientNet-B0 (Transfer Learning + Custom Classification Head)",
+  "classes": [
+    "broken_infrastructure",
+    "electrical_hazard",
+    "garbage_waste",
+    "parking_road_damage",
+    "wall_ceiling_damage"
+  ],
+  "num_classes": 5,
+  "image_size": 224,
+  "normalization": {
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ]
+  },
+  "hyperparameters": {
+    "epochs_total": 25,
+    "freeze_epochs": 5,
+    "unfreeze_blocks": 2,
+    "batch_size": 16,
+    "lr_stage1": 0.0001,
+    "lr_stage2": 1e-05,
+    "patience": 5,
+    "seed": 42,
+    "optimizer": "AdamW",
+    "scheduler": "ReduceLROnPlateau"
+  },
+  "training_dataset": "C:\\Users\\samee\\OneDrive\\Documents\\ChatGPT\\Society Maintenance Tracker\\ml-service\\data\\processed\\classification",
+  "model_status": "ready",
+  "checkpoint_path": "C:\\Users\\samee\\OneDrive\\Documents\\ChatGPT\\Society Maintenance Tracker\\ml-service\\models\\classification\\nivara-visual-classifier.pt",
+  "trained_at": "2026-08-26T07:33:25.540813Z",
+  "git_commit": "6193742",
+  "device": "cpu"
+}

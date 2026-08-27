@@ -51,7 +51,9 @@ export const updateNotice = asyncHandler(async (req, res) => {
     await sendImportantNoticeEmail({
       recipients: residents.map((resident) => resident.email),
       title: notice.title,
-      content: notice.content
+      content: notice.content,
+      isUpdate: true,
+      timestamp: notice.updatedAt || new Date()
     });
   }
 

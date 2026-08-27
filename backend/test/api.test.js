@@ -54,7 +54,19 @@ test("auth validates registration, duplicates, login, and JWT protection", async
     confirmPassword: "Password123"
   });
   assert.equal(reg.status, 201);
+  assert.equal(reg.body.data.user.role, "resident");
   assert.ok(!reg.body.data.user.passwordHash);
+
+  // Attempt role escalation by passing role: "admin" in public registration
+  const escalationAttempt = await request(app).post("/api/auth/register").send({
+    name: "Sneaky User",
+    email: "sneaky@test.com",
+    password: "Password123",
+    confirmPassword: "Password123",
+    role: "admin"
+  });
+  assert.equal(escalationAttempt.status, 201);
+  assert.equal(escalationAttempt.body.data.user.role, "resident"); // MUST strictly be resident
 
   const dup = await request(app).post("/api/auth/register").send({
     name: "New Resident",
@@ -67,8 +79,24 @@ test("auth validates registration, duplicates, login, and JWT protection", async
   const invalid = await request(app).post("/api/auth/login").send({ email: "new@test.com", password: "wrong" });
   assert.equal(invalid.status, 401);
 
+  // Stale/unseeded demo accounts cannot log in
+  const staleAdmin = await request(app).post("/api/auth/login").send({ email: "admin@example.com", password: "Password123" });
+  assert.equal(staleAdmin.status, 401);
+  const staleResident = await request(app).post("/api/auth/login").send({ email: "asha@example.com", password: "Password123" });
+  assert.equal(staleResident.status, 401);
+
   const protectedRes = await request(app).get("/api/auth/me");
   assert.equal(protectedRes.status, 401);
+
+  // RBAC unauthenticated vs resident vs admin
+  const unauthAdmin = await request(app).get("/api/admin/complaints");
+  assert.equal(unauthAdmin.status, 401);
+
+  const residentAdmin = await request(app).get("/api/admin/complaints").set("Authorization", `Bearer ${residentToken}`);
+  assert.equal(residentAdmin.status, 403);
+
+  const authAdmin = await request(app).get("/api/admin/complaints").set("Authorization", `Bearer ${adminToken}`);
+  assert.equal(authAdmin.status, 200);
 });
 
 test("complaint access, status history, lifecycle, and dashboard work", async () => {
@@ -115,6 +143,27 @@ test("complaint access, status history, lifecycle, and dashboard work", async ()
   assert.equal(dashboard.status, 200);
   assert.equal(dashboard.body.data.total, 1);
   assert.equal(dashboard.body.data.resolved, 1);
+  assert.ok(dashboard.body.data.slaPerformance);
+  assert.ok(Array.isArray(dashboard.body.data.categoryResolution));
+});
+
+test("approaching SLA and SLA performance calculation", async () => {
+  // Create a complaint approaching SLA (created 2.2 days ago when OVERDUE_DAYS is 3)
+  const approachingDate = new Date(Date.now() - 2.2 * 24 * 60 * 60 * 1000);
+  await Complaint.create({
+    residentId,
+    category: "Plumbing",
+    description: "Main line pressure drop near flat 204.",
+    priority: "Medium",
+    status: "In Progress",
+    createdAt: approachingDate,
+    updatedAt: approachingDate,
+    statusHistory: [{ status: "Open", changedBy: residentId, timestamp: approachingDate }]
+  });
+
+  const dashboard = await request(app).get("/api/admin/dashboard").set("Authorization", `Bearer ${adminToken}`);
+  assert.equal(dashboard.status, 200);
+  assert.ok(dashboard.body.data.slaPerformance.approachingSla >= 1);
 });
 
 test("overdue sorting and notices work", async () => {
